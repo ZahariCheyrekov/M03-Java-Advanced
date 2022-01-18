@@ -51,10 +51,10 @@ public class T05MatrixShuffling {
     }
 
     private static boolean checkIndexes(int first, int second, int third, int forth, String[][] matrix) {
-        return first >= 0 && first <= matrix.length &&
-                second >= 0 && second <= matrix.length &&
-                third >= 0 && third <= matrix.length &&
-                forth >= 0 && forth <= matrix.length;
+        return first >= 0 && first < matrix.length &&
+                second >= 0 && second < matrix[0].length &&
+                third >= 0 && third < matrix.length &&
+                forth >= 0 && forth < matrix[0].length;
     }
 
     private static String[][] fillMatrix(int rows, int cols, Scanner scanner) {

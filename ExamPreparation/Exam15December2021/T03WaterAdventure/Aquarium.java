@@ -4,77 +4,69 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Aquarium {
-    private List<Fish> fishInPool;
     private String name;
     private int capacity;
     private int size;
+    private List<Fish> fishInPool;
 
     public Aquarium(String name, int capacity, int size) {
-        this.fishInPool = new ArrayList<>();
         this.name = name;
         this.capacity = capacity;
         this.size = size;
+        this.fishInPool = new ArrayList<>();
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public int getCapacity() {
-        return capacity;
+        return this.capacity;
     }
 
     public int getSize() {
-        return size;
+        return this.size;
     }
 
     public int getFishInPool() {
-        return fishInPool.size();
+        return this.fishInPool.size();
     }
 
     public void add(Fish fish) {
-        if (!fishInPool.contains(fish)) {
-            if (fishInPool.size() < size) {
-                fishInPool.add(fish);
+        if (this.getFishInPool() < this.getCapacity()) {
+            if (!this.fishInPool.contains(fish)) {
+                this.fishInPool.add(fish);
             }
         }
-    }
-
-    public Fish findFish(String name) {
-        Fish fishName = null;
-
-        for (Fish fish : fishInPool) {
-            if (fish.getName().equals(name)) {
-                fishName = fish;
-            }
-        }
-
-        return fishName;
     }
 
     public boolean remove(String name) {
-        boolean isSuccessful = false;
-
-        for (Fish fish : fishInPool) {
+        for (Fish fish : this.fishInPool) {
             if (fish.getName().equals(name)) {
-                fishInPool.remove(fish);
-                isSuccessful = true;
-                break;
+                this.fishInPool.remove(fish);
+                return true;
             }
         }
 
-        return isSuccessful;
+        return false;
     }
 
-    public StringBuilder report() {
-        StringBuilder fishInfo = new StringBuilder();
+    public Fish findFish(String name) {
+        return this.fishInPool.stream().filter(fish -> fish.getName()
+                .equals(name)).findFirst()
+                .orElse(null);
+    }
 
-        fishInfo.append(String.format("Aquarium: %s ^ Size: %d%n", this.name, this.size));
+    public String report() {
+        StringBuilder report = new StringBuilder();
 
-        for (Fish fish : fishInPool) {
-            fishInfo.append(fish);
+        report.append(String.format("Aquarium: %s ^ Size: %d", this.getName(), this.getSize()))
+                .append(System.lineSeparator());
+
+        for (Fish fish : this.fishInPool) {
+            report.append(fish.toString())
+                    .append(System.lineSeparator());
         }
-
-        return fishInfo;
+        return report.toString();
     }
 }

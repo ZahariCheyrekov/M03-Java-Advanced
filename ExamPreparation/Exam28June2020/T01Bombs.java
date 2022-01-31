@@ -59,6 +59,7 @@ public class T01Bombs {
                 default:
                     int bombCasing = bombsStack.pop() - 5;
                     bombsStack.push(bombCasing);
+                    break;
             }
 
             if (bomb != null) {

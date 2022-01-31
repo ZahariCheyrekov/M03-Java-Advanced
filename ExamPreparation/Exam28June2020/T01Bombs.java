@@ -26,10 +26,7 @@ public class T01Bombs {
         fillStack(bombsStack, casings);
 
 
-        while (!bombsStack.isEmpty() || !bombsQueue.isEmpty()) {
-            if (bombsStack.isEmpty() || bombsQueue.isEmpty()) {
-                break;
-            }
+        while (!bombsStack.isEmpty() && !bombsQueue.isEmpty()) {
 
             int effect = bombsStack.peek();
             int casing = bombsQueue.peek();

@@ -25,7 +25,7 @@ public class T04Agents {
             }
             input = scanner.nextLine();
         }
-
+        
         input = scanner.nextLine();
         while (!input.equals("operate")) {
 

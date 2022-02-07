@@ -5,19 +5,12 @@ import java.util.*;
 public class T01AutumnCocktails {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int[] ingredients = readElements(scanner);
 
         ArrayDeque<Integer> ingredientsQueue = new ArrayDeque<>();
-        for (int material : ingredients) {
-            ingredientsQueue.offer(material);
-        }
-
-        int[] freshnessNumbers = readElements(scanner);
+        fillQueue(scanner, ingredientsQueue);
 
         ArrayDeque<Integer> freshnessStack = new ArrayDeque<>();
-        for (int magic : freshnessNumbers) {
-            freshnessStack.push(magic);
-        }
+        fillStack(scanner, freshnessStack);
 
         Map<String, Integer> cocktails = new TreeMap<>();
 
@@ -63,7 +56,6 @@ public class T01AutumnCocktails {
             } else {
                 freshnessStack.pop();
                 int ingredientNum = ingredientsQueue.poll() + 5;
-
                 ingredientsQueue.offer(ingredientNum);
             }
         }
@@ -87,8 +79,21 @@ public class T01AutumnCocktails {
         cocktails.forEach((key, value) -> System.out.printf(" # %s --> %d%n", key, value));
     }
 
-    private static int[] readElements(Scanner scanner) {
-        return Arrays.stream(scanner.nextLine().split("\\s+"))
+    private static void fillStack(Scanner scanner, ArrayDeque<Integer> freshness) {
+        int[] data = Arrays.stream(scanner.nextLine().split("[\\s]+"))
                 .mapToInt(Integer::parseInt).toArray();
+
+        for (int element : data) {
+            freshness.push(element);
+        }
+    }
+
+    private static void fillQueue(Scanner scanner, ArrayDeque<Integer> ingredients) {
+        int[] data = Arrays.stream(scanner.nextLine().split("[\\s]+"))
+                .mapToInt(Integer::parseInt).toArray();
+
+        for (int element : data) {
+            ingredients.offer(element);
+        }
     }
 }

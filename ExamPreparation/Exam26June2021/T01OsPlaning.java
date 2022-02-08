@@ -15,7 +15,7 @@ public class T01OsPlaning {
         int[] threads = readData(scanner);
         ArrayDeque<Integer> threadsQueue = fillQueue(threads);
 
-        int taskValue = Integer.parseInt(scanner.nextLine());
+        int killTask = Integer.parseInt(scanner.nextLine());
 
         while (!finishedTask) {
             if (valuesStack.isEmpty() || threadsQueue.isEmpty()) {
@@ -25,10 +25,10 @@ public class T01OsPlaning {
             int value = valuesStack.peek();
             int thread = threadsQueue.peek();
 
-            if (value == taskValue) {
+            if (value == killTask) {
                 System.out.printf("Thread with value %d killed task %d%n", thread, value);
                 finishedTask = true;
-                continue;
+                break;
             }
 
             if (thread >= value) {

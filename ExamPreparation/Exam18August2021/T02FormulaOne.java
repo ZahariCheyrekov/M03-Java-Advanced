@@ -3,12 +3,12 @@ package M03_JavaAdvanced.ExamPreparation.Exam18August2021;
 import java.util.Scanner;
 
 public class T02FormulaOne {
-    public static char[][] area;
+    private static char[][] matrix;
 
-    public static int playerRow;
-    public static int playerCol;
+    private static int playerRow;
+    private static int playerCol;
 
-    public static boolean reachedFinish = false;
+    private static boolean reachedFinish;
 
     public static int row;
     public static int col;
@@ -16,16 +16,16 @@ public class T02FormulaOne {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int size = Integer.parseInt(scanner.nextLine());
-        int countCommands = Integer.parseInt(scanner.nextLine());
+        int countOfCommands = Integer.parseInt(scanner.nextLine());
 
-        area = new char[size][size];
-        readArea(scanner);
+        matrix = new char[size][size];
+        fillMatrix(scanner);
 
         String direction = scanner.nextLine();
         while (!reachedFinish) {
-            countCommands--;
+            countOfCommands--;
 
-            area[playerRow][playerCol] = '.';
+            matrix[playerRow][playerCol] = '.';
             movePlayer(direction);
 
             if (reachedFinish) {
@@ -33,7 +33,7 @@ public class T02FormulaOne {
                 break;
             }
 
-            if (countCommands == 0) {
+            if (countOfCommands == 0) {
                 System.out.println("Oh no, the player got lost on the track!");
                 break;
             }
@@ -41,7 +41,7 @@ public class T02FormulaOne {
             direction = scanner.nextLine();
         }
 
-        printArea();
+        printMatrix();
     }
 
     private static void movePlayer(String direction) {
@@ -53,32 +53,28 @@ public class T02FormulaOne {
         boolean inBounds = checkIfInBounds(row, col);
 
         if (inBounds) {
-            char cell = area[row][col];
+            char cell = matrix[row][col];
 
             checkCurrentCell(cell, direction);
         }
 
         if (row < 0) {
-            row = area.length - 1;
+            row = matrix.length - 1;
 
-        } else if (row >= area.length) {
+        } else if (row >= matrix.length) {
             row = 0;
 
         } else if (col < 0) {
-            col = area[row].length - 1;
+            col = matrix[row].length - 1;
 
-        } else if (col >= area[row].length) {
+        } else if (col >= matrix[row].length) {
             col = 0;
         }
-
-        char cell = area[row][col];
-
-        checkCurrentCell(cell, direction);
 
         playerRow = row;
         playerCol = col;
 
-        area[playerRow][playerCol] = 'P';
+        matrix[playerRow][playerCol] = 'P';
     }
 
     private static void checkCurrentCell(char cell, String direction) {
@@ -146,12 +142,12 @@ public class T02FormulaOne {
     }
 
     private static boolean checkIfInBounds(int row, int col) {
-        return (row >= 0) && (row < area.length) &&
-                (col >= 0) && (col < area[row].length);
+        return (row >= 0) && (row < matrix.length) &&
+                (col >= 0) && (col < matrix[row].length);
     }
 
-    private static void readArea(Scanner scanner) {
-        for (int row = 0; row < area.length; row++) {
+    private static void fillMatrix(Scanner scanner) {
+        for (int row = 0; row < matrix.length; row++) {
             String[] elements = scanner.nextLine().split("");
 
             for (int col = 0; col < elements.length; col++) {
@@ -162,13 +158,13 @@ public class T02FormulaOne {
                     playerCol = col;
                 }
 
-                area[row][col] = currentChar;
+                matrix[row][col] = currentChar;
             }
         }
     }
 
-    private static void printArea() {
-        for (char[] row : area) {
+    private static void printMatrix() {
+        for (char[] row : matrix) {
             for (char col : row) {
                 System.out.print(col);
             }

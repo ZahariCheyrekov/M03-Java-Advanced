@@ -1,48 +1,27 @@
-package M03_JavaAdvanced.ExamPreparation.Exam18August2021.T03Cafe;
+package cafe;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cafe {
+    private List<Employee> employees;
     private String name;
     private int capacity;
-    private List<Employee> employees;
 
     public Cafe(String name, int capacity) {
+        this.employees = new ArrayList<>();
         this.name = name;
         this.capacity = capacity;
-        this.employees = new ArrayList<>();
-    }
-
-    public int getCount() {
-        return this.employees.size();
-    }
-
-    public int getCapacity() {
-        return this.capacity;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public boolean removeEmployee(String name) {
-        return this.employees
-                .removeIf(employee -> employee.getName().equals(name));
-    }
-
-    public Employee getEmployee(String name) {
-        return this.employees
-                .stream()
-                .filter(employee -> employee.getName().equals(name))
-                .findFirst()
-                .orElse(null);
     }
 
     public void addEmployee(Employee employee) {
-        if (this.getCount() < this.getCapacity()) {
+        if (this.capacity > this.employees.size()) {
             this.employees.add(employee);
         }
+    }
+
+    public boolean removeEmployee(String name) {
+        return this.employees.removeIf(employee -> employee.getName().equals(name));
     }
 
     public Employee getOldestEmployee() {
@@ -59,18 +38,28 @@ public class Cafe {
         return emp;
     }
 
-    public String report() {
-        StringBuilder out = new StringBuilder();
+    public Employee getEmployee(String name) {
+        return this.employees
+                .stream()
+                .filter(employee -> employee.getName().equals(name))
+                .findFirst()
+                .orElse(null);
+    }
 
-        out.append(String.format("Employees working at Cafe %s:"
-                , this.getName()))
-                .append(System.lineSeparator());
+    public int getCount() {
+        return this.employees.size();
+    }
+
+    public String report() {
+        StringBuilder message = new StringBuilder();
+
+        message.append(String.format("Employees working at Cafe %s:", this.name)).append(System.lineSeparator());
 
         for (Employee employee : this.employees) {
-            out.append(employee.toString())
+            message.append(employee.toString())
                     .append(System.lineSeparator());
         }
 
-        return out.toString();
+        return message.toString();
     }
 }

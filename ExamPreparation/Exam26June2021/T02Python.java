@@ -3,27 +3,27 @@ package M03_JavaAdvanced.ExamPreparation.Exam26June2021;
 import java.util.*;
 
 public class T02Python {
-    public static char[][] screen;
+    private static char[][] screen;
 
-    public static int snakeRow;
-    public static int snakeCol;
+    private static int snakeRow;
+    private static int snakeCol;
 
-    public static int snakeLength = 1;
+    private static int snakeLength = 1;
 
-    public static int allFood;
-    public static int foodEaten;
+    private static int allFood;
+    private static int foodEaten;
 
-    public static List<String> commands = new ArrayList<>();
+    private static List<String> commands = new ArrayList<>();
 
-    public static boolean killedByEnemy = false;
+    private static boolean killedByEnemy = false;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int size = Integer.parseInt(scanner.nextLine());
-        screen = new char[size][size];
 
         readCommands(scanner);
 
+        screen = new char[size][size];
         readScreen(scanner);
 
         while (!commands.isEmpty()) {
@@ -33,24 +33,19 @@ public class T02Python {
             moveSnake(direction);
 
             if (killedByEnemy) {
+                System.out.println("You lose! Killed by an enemy!");
                 break;
             }
 
-            if (foodEaten == allFood) {
+            if (allFood == foodEaten) {
+                System.out.printf("You win! Final python length is %s%n", snakeLength);
                 break;
             }
         }
 
-        if (killedByEnemy) {
-            System.out.println("You lose! Killed by an enemy!");
-
-        } else if (foodEaten == allFood) {
-            System.out.printf("You win! Final python length is %s%n", snakeLength);
-
-        } else {
+        if (!killedByEnemy && foodEaten != allFood) {
             System.out.printf("You lose! There is still %d food to be eaten.%n", allFood - foodEaten);
         }
-
     }
 
     private static void moveSnake(String direction) {

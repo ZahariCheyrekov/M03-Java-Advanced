@@ -5,24 +5,23 @@ import java.util.*;
 public class T01PastryShop {
     public static Map<String, Integer> craftedItems = new LinkedHashMap<>();
 
-    public static int biscuits = 0;
-    public static int cakes = 0;
-    public static int pastries = 0;
-    public static int pies = 0;
+    private static int biscuits = 0;
+    private static int cakes = 0;
+    private static int pastries = 0;
+    private static int pies = 0;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-        craftedItems.put("Biscuit", 0);
-        craftedItems.put("Cake", 0);
-        craftedItems.put("Pie", 0);
-        craftedItems.put("Pastry", 0);
-
         int[] liquids = readData(scanner);
         ArrayDeque<Integer> liquidsQueue = fillQueue(liquids);
 
         int[] ingredients = readData(scanner);
         ArrayDeque<Integer> ingredientsStack = fillStack(ingredients);
+
+        craftedItems.put("Biscuit", 0);
+        craftedItems.put("Cake", 0);
+        craftedItems.put("Pie", 0);
+        craftedItems.put("Pastry", 0);
 
         while (!liquidsQueue.isEmpty() && !ingredientsStack.isEmpty()) {
             int liquid = liquidsQueue.peek();
@@ -36,58 +35,48 @@ public class T01PastryShop {
             switch (sum) {
                 case 25:
                     product = "Biscuit";
-                    crafted = true;
                     biscuits++;
+                    crafted = true;
                     break;
-
                 case 50:
                     product = "Cake";
-                    crafted = true;
                     cakes++;
+                    crafted = true;
                     break;
-
                 case 75:
                     product = "Pastry";
-                    crafted = true;
                     pastries++;
+                    crafted = true;
                     break;
-
                 case 100:
                     product = "Pie";
-                    crafted = true;
                     pies++;
-                    break;
-
-                default:
-                    liquidsQueue.poll();
-                    int valueIngredient = ingredientsStack.pop() + 3;
-                    ingredientsStack.push(valueIngredient);
+                    crafted = true;
                     break;
             }
 
             if (crafted) {
+                craftedItems.put(product, craftedItems.get(product) + 1);
                 liquidsQueue.poll();
                 ingredientsStack.pop();
-            }
 
-            if (product != null) {
-                craftedItems.put(product, craftedItems.get(product) + 1);
+            } else {
+                liquidsQueue.poll();
+                int currentIngredient = ingredientsStack.pop() + 3;
+                ingredientsStack.push(currentIngredient);
             }
         }
 
-        boolean succeeded = (biscuits >= 1) && (cakes >= 1) &&
-                (pastries >= 1) && (pies >= 1);
+        boolean succeeded = biscuits >= 1 && cakes >= 1 && pastries >= 1 && pies >= 1;
 
         if (succeeded) {
             System.out.println("Great! You succeeded in cooking all the food!");
-
         } else {
             System.out.println("What a pity! You didn't have enough materials to cook everything.");
         }
 
         if (liquidsQueue.isEmpty()) {
             System.out.println("Liquids left: none");
-
         } else {
             System.out.print("Liquids left: ");
             System.out.println(liquidsQueue.toString()

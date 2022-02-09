@@ -3,15 +3,15 @@ package M03_JavaAdvanced.ExamPreparation.Exam14April2021;
 import java.util.Scanner;
 
 public class T02CookingJourney {
-    public static char[][] shop;
+    private static char[][] shop;
 
-    public static int bakerRow;
-    public static int bakerCol;
+    private static int bakerRow;
+    private static int bakerCol;
 
-    public static int moneyCollected = 0;
+    private static int collectedMoney;
 
-    public static boolean collectedEnoughMoney = false;
-    public static boolean wentOut = false;
+    private static boolean outOfShop;
+    private static boolean collectedEnoughMoney;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -21,32 +21,25 @@ public class T02CookingJourney {
         readShop(scanner);
 
         String direction = scanner.nextLine();
-        while (!collectedEnoughMoney && !wentOut) {
+        while (!outOfShop) {
 
             shop[bakerRow][bakerCol] = '-';
             moveBaker(direction);
 
-            if (wentOut) {
+            if (outOfShop) {
+                System.out.println("Bad news! You are out of the pastry shop.");
                 break;
             }
 
             if (collectedEnoughMoney) {
+                System.out.println("Good news! You succeeded in collecting enough money!");
                 break;
             }
 
             direction = scanner.nextLine();
         }
 
-        if (wentOut) {
-            System.out.println("Bad news! You are out of the pastry shop.");
-        }
-
-        if (collectedEnoughMoney) {
-            System.out.println("Good news! You succeeded in collecting enough money!");
-        }
-
-        System.out.println("Money: " + moneyCollected);
-
+        System.out.println("Money: " + collectedMoney);
         printMatrix();
     }
 
@@ -73,49 +66,39 @@ public class T02CookingJourney {
         }
 
         boolean inBounds = checkIfInBounds(row, col);
-
         if (inBounds) {
-            char currentChar = shop[row][col];
+            char currentCell = shop[row][col];
 
-            if (Character.isDigit(currentChar)) {
-                moneyCollected += Integer.parseInt(String.valueOf(currentChar));
+            if (Character.isDigit(currentCell)) {
+                collectedMoney += Integer.parseInt(String.valueOf(currentCell));
 
-                if (moneyCollected >= 50) {
+                if (collectedMoney >= 50) {
                     collectedEnoughMoney = true;
                 }
 
-                bakerRow = row;
-                bakerCol = col;
-
-                shop[bakerRow][bakerCol] = 'S';
-
-            } else if (currentChar == 'P') {
+            } else if (currentCell == 'P') {
                 shop[row][col] = '-';
 
-                int[] otherPillar = findOtherPillar();
+                int[] secondPillar = findPillar();
 
-                int pillarRow = otherPillar[0];
-                int pillarCol = otherPillar[1];
+                int pillarRow = secondPillar[0];
+                int pillarCol = secondPillar[1];
 
-                bakerRow = pillarRow;
-                bakerCol = pillarCol;
-
-                shop[bakerRow][bakerCol] = 'S';
-
-            } else if (currentChar == '-') {
-                bakerRow = row;
-                bakerCol = col;
-
-                shop[bakerRow][bakerCol] = 'S';
+                row = pillarRow;
+                col = pillarCol;
             }
 
+            bakerRow = row;
+            bakerCol = col;
+
+            shop[bakerRow][bakerCol] = 'S';
+
         } else {
-            wentOut = true;
-            shop[bakerRow][bakerCol] = '-';
+            outOfShop = true;
         }
     }
 
-    private static int[] findOtherPillar() {
+    private static int[] findPillar() {
         int[] pillarCoordinates = new int[2];
         boolean hasBeenFound = false;
 
@@ -126,6 +109,7 @@ public class T02CookingJourney {
                 if (currentChar == 'P') {
                     pillarCoordinates[0] = row;
                     pillarCoordinates[1] = col;
+
                     hasBeenFound = true;
                 }
             }

@@ -1,8 +1,6 @@
 package M03_JavaAdvanced.ExamPreparation.Exam20Feb2021;
 
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
 
 public class T02Bomb {
     public static char[][] field;
@@ -10,50 +8,40 @@ public class T02Bomb {
     public static int sapperRow;
     public static int sapperCol;
 
-    public static int allBombs = 0;
-    public static int foundBombs = 0;
+    public static int allBombs;
+    public static int foundBombs;
 
-    public static boolean foundEnd = false;
-    public static boolean foundAllBombs = false;
+    public static boolean foundEnd;
+    public static boolean foundAllBombs;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int size = Integer.parseInt(scanner.nextLine());
         field = new char[size][size];
 
-        String[] directions = scanner.nextLine().split("[,\\s]+");
-        ArrayDeque<String> allDirections = new ArrayDeque<>();
-
-        Collections.addAll(allDirections, directions);
+        String[] commands = scanner.nextLine().split("[,\\s]+");
 
         readField(scanner);
 
-        while (!allDirections.isEmpty()) {
-            String direction = allDirections.poll();
+        int index = 0;
+        while (index < commands.length) {
+            String direction = commands[index++];
 
             field[sapperRow][sapperCol] = '+';
             moveSapper(direction);
 
-            if (allDirections.isEmpty()) {
+            if (foundAllBombs) {
+                System.out.println("Congratulations! You found all bombs!");
                 break;
             }
 
             if (foundEnd) {
-                break;
-            }
-
-            if (foundAllBombs) {
+                System.out.printf("END! %d bombs left on the field%n", allBombs - foundBombs);
                 break;
             }
         }
 
-        if (foundAllBombs) {
-            System.out.println("Congratulations! You found all bombs!");
-
-        } else if (foundEnd) {
-            System.out.printf("END! %d bombs left on the field%n", allBombs - foundBombs);
-
-        } else {
+        if (!foundEnd && !foundAllBombs) {
             System.out.printf("%d bombs left on the field. Sapper position: (%d,%d)%n",
                     allBombs - foundBombs, sapperRow, sapperCol);
         }
@@ -82,30 +70,33 @@ public class T02Bomb {
         }
 
         boolean inBounds = checkIfInBounds(row, col);
+
         if (inBounds) {
             char currentCell = field[row][col];
 
             switch (currentCell) {
-                case 'B':
-                    System.out.println("You found a bomb!");
-                    foundBombs++;
-
-                    if (foundBombs == allBombs) {
-                        foundAllBombs = true;
-                    }
-                    break;
-
                 case 'e':
                     foundEnd = true;
+                    break;
+
+                case 'B':
+                    System.out.println("You found a bomb!");
+
+                    foundBombs++;
+
+                    if (foundBombs >= allBombs) {
+                        foundAllBombs = true;
+                    }
                     break;
             }
 
             sapperRow = row;
             sapperCol = col;
-        }
 
-        field[sapperRow][sapperCol] = 's';
+            field[sapperRow][sapperCol] = 's';
+        }
     }
+
 
     private static boolean checkIfInBounds(int row, int col) {
         return (row >= 0) && (row < field.length) &&

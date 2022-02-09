@@ -5,28 +5,29 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class T01Bouquets {
-    public static int bouquets = 0;
-    public static int storedFlowers = 0;
+    private static int bouquets;
+    private static int storedFlowers;
+
+    private static final int BOUQUETS_TO_MAKE = 5;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int[] tulips = readData(scanner);
-        ArrayDeque<Integer> tulipsStack = fillStack(tulips);
-
         int[] daffodils = readData(scanner);
-        ArrayDeque<Integer> daffodilsQueue = fillQueue(daffodils);
+        ArrayDeque<Integer> daffodilsStack = fillStack(daffodils);
 
-        while (!tulipsStack.isEmpty() && !daffodilsQueue.isEmpty()) {
-            int tulip = tulipsStack.peek();
-            int daffodil = daffodilsQueue.peek();
+        int[] tulips = readData(scanner);
+        ArrayDeque<Integer> tulipsQueue = fillQueue(tulips);
+
+        while (!daffodilsStack.isEmpty() && !tulipsQueue.isEmpty()) {
+            int daffodil = daffodilsStack.peek();
+            int tulip = tulipsQueue.peek();
 
             int sum = daffodil + tulip;
 
             if (sum == 15) {
                 bouquets++;
-
-                tulipsStack.pop();
-                daffodilsQueue.poll();
+                daffodilsStack.pop();
+                tulipsQueue.poll();
 
             } else if (sum > 15) {
                 int valueTulip = tulip;
@@ -38,28 +39,25 @@ public class T01Bouquets {
                     if (sum == 15) {
                         bouquets++;
 
-                        tulipsStack.pop();
-                        daffodilsQueue.poll();
+                        tulipsQueue.pop();
+                        daffodilsStack.poll();
                     }
                 }
-
             }
 
             if (sum < 15) {
                 storedFlowers += sum;
-
-                tulipsStack.pop();
-                daffodilsQueue.poll();
+                daffodilsStack.pop();
+                tulipsQueue.poll();
             }
         }
 
         bouquets += storedFlowers / 15;
 
-        if (bouquets >= 5) {
-            System.out.printf("You made it! You go to the competition with %d bouquets!", bouquets);
-
+        if (bouquets >= BOUQUETS_TO_MAKE) {
+            System.out.printf("You made it! You go to the competition with %d bouquets!%n", bouquets);
         } else {
-            System.out.printf("You failed... You need more %d bouquets.", 5 - bouquets);
+            System.out.printf("You failed... You need more %d bouquets.%n", BOUQUETS_TO_MAKE - bouquets);
         }
     }
 

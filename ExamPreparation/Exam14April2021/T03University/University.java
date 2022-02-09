@@ -1,4 +1,4 @@
-package M03_JavaAdvanced.ExamPreparation.Exam14April2021.T03University;
+package university;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +13,41 @@ public class University {
     }
 
     public int getCapacity() {
-        return this.capacity;
+        return capacity;
     }
 
     public List<Student> getStudents() {
-        return this.students;
+        return students;
     }
 
     public int getStudentCount() {
         return this.students.size();
+    }
+
+    public String registerStudent(Student student) {
+        if (this.capacity > this.students.size()) {
+            if (this.students.contains(student)) {
+                return "Student is already in the university";
+
+            } else {
+                this.students.add(student);
+
+                return String.format("Added student %s %s",
+                        student.getFirstName(), student.getLastName());
+            }
+        }
+        return "No seats in the university";
+    }
+
+    public String dismissStudent(Student student) {
+        if (this.students.contains(student)) {
+
+            this.students.remove(student);
+
+            return String.format("Removed student %s %s",
+                    student.getFirstName(), student.getLastName());
+        }
+        return "Student not found";
     }
 
     public Student getStudent(String firstName, String lastName) {
@@ -31,48 +57,6 @@ public class University {
                         student.getLastName().equals(lastName))
                 .findFirst()
                 .orElse(null);
-    }
-
-    public String dismissStudent(Student student) {
-        StringBuilder dismiss = new StringBuilder();
-
-        if (this.students.contains(student)) {
-            dismiss.append("Removed student ")
-                    .append(student.getFirstName())
-                    .append(" ")
-                    .append(student.getLastName());
-
-            this.students.remove(student);
-
-        } else {
-            dismiss.append("Student not found");
-        }
-
-        return dismiss.toString();
-    }
-
-    public String registerStudent(Student student) {
-        StringBuilder output = new StringBuilder();
-
-        if (this.getStudentCount() < this.getCapacity()) {
-            if (this.students.contains(student)) {
-                output.append("Student is already in the university");
-
-            } else {
-                this.students.add(student);
-
-                output.append("Added student")
-                        .append(" ")
-                        .append(student.getFirstName())
-                        .append(" ")
-                        .append(student.getLastName());
-
-            }
-        } else {
-            output.append("No seats in the university");
-        }
-
-        return output.toString();
     }
 
     public String getStatistics() {

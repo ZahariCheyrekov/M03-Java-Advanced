@@ -5,63 +5,67 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class T01MagicBox {
-    public static int claimedItems = 0;
+    private static Scanner scanner;
+
+    private static int claimedItems;
+    private static final int NEEDED_SUM = 90;
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int[] firstMagicBox = readData(scanner);
-        ArrayDeque<Integer> boxQueue = fillQueue(firstMagicBox);
+        scanner = new Scanner(System.in);
 
-        int[] secondMagicBox = readData(scanner);
-        ArrayDeque<Integer> boxStack = fillStack(secondMagicBox);
+        ArrayDeque<Integer> firstMagiBox = fillQueue();
+        ArrayDeque<Integer> secondMagicBox = fillStack();
 
-        while (!boxQueue.isEmpty() && !boxStack.isEmpty()) {
-            int firstBox = boxQueue.peek();
-            int secondBox = boxStack.peek();
+        while (!firstMagiBox.isEmpty() && !secondMagicBox.isEmpty()) {
+            int first = firstMagiBox.peek();
+            int second = secondMagicBox.peek();
 
-            int sum = firstBox + secondBox;
+            int result = first + second;
 
-            if (sum % 2 == 0) {
-                claimedItems += sum;
+            if (result % 2 == 0) {
 
-                boxQueue.poll();
-                boxStack.pop();
+                claimedItems += result;
+                firstMagiBox.poll();
+                secondMagicBox.pop();
 
             } else {
-                int lastItemSecondBox = boxStack.pop();
-                boxQueue.offer(lastItemSecondBox);
+                int lastSecond = secondMagicBox.pop();
+                firstMagiBox.offer(lastSecond);
             }
         }
 
-        if (boxQueue.isEmpty()) {
+        if (firstMagiBox.isEmpty()) {
             System.out.println("First magic box is empty.");
 
         } else {
             System.out.println("Second magic box is empty.");
         }
 
-        if (claimedItems >= 90) {
+        if (claimedItems >= NEEDED_SUM) {
             System.out.printf("Wow, your prey was epic! Value: %d%n", claimedItems);
-
         } else {
             System.out.printf("Poor prey... Value: %d%n", claimedItems);
         }
     }
 
-    private static ArrayDeque<Integer> fillQueue(int[] firstMagicBox) {
+    private static ArrayDeque<Integer> fillQueue() {
+        int[] numbers = readData(scanner);
+
         ArrayDeque<Integer> queue = new ArrayDeque<>();
 
-        for (int box : firstMagicBox) {
+        for (int box : numbers) {
             queue.offer(box);
         }
 
         return queue;
     }
 
-    private static ArrayDeque<Integer> fillStack(int[] secondMagicBox) {
+    private static ArrayDeque<Integer> fillStack() {
+        int[] numbers = readData(scanner);
+
         ArrayDeque<Integer> stack = new ArrayDeque<>();
 
-        for (int box : secondMagicBox) {
+        for (int box : numbers) {
             stack.push(box);
         }
 

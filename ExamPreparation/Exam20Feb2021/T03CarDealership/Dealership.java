@@ -1,45 +1,29 @@
-package M03_JavaAdvanced.ExamPreparation.Exam20Feb2021.T03CarDealership;
-
+package dealership;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Dealership {
+    private List<Car> data;
     private String name;
     private int capacity;
-    private List<Car> data;
 
     public Dealership(String name, int capacity) {
+        this.data = new ArrayList<>();
         this.name = name;
         this.capacity = capacity;
-        this.data = new ArrayList<>();
-    }
-
-    public int getCapacity() {
-        return this.capacity;
-    }
-
-    public int getCount() {
-        return this.data.size();
-    }
-
-    public String getName() {
-        return this.name;
     }
 
     public void add(Car car) {
-        if (this.getCapacity() > this.getCount()) {
+        if (this.capacity > this.data.size()) {
             this.data.add(car);
         }
     }
 
-    public Car getCar(String manufacturer, String model) {
+    public boolean buy(String manufacturer, String model) {
         return this.data
-                .stream()
-                .filter(car -> car.getManufacturer().equals(manufacturer) &&
-                        car.getModel().equals(model))
-                .findFirst()
-                .orElse(null);
+                .removeIf(car -> car.getManufacturer().equals(manufacturer) &&
+                        car.getModel().equals(model));
     }
 
     public Car getLatestCar() {
@@ -55,27 +39,30 @@ public class Dealership {
         return this.data.get(index);
     }
 
-    public boolean buy(String manufacturer, String model) {
-        for (Car car : this.data) {
-            if (car.getManufacturer().equals(manufacturer) && car.getModel().equals(model)) {
-                this.data.remove(car);
-                return true;
-            }
-        }
+    public Car getCar(String manufacturer, String model) {
+        return this.data
+                .stream()
+                .filter(car -> car.getManufacturer().equals(manufacturer) &&
+                        car.getModel().equals(model))
+                .findFirst()
+                .orElse(null);
+    }
 
-        return false;
+    public int getCount() {
+        return this.data.size();
     }
 
     public String getStatistics() {
-        StringBuilder out = new StringBuilder();
+        StringBuilder message = new StringBuilder();
 
-        out.append(String.format("The cars are in a car dealership %s:%n", this.getName()));
+        message.append(String.format(" The cars are in a car dealership %s:", this.name))
+                .append(System.lineSeparator());
 
-
-        for (Car value : this.data) {
-            out.append(value.toString())
+        for (Car car : this.data) {
+            message.append(car)
                     .append(System.lineSeparator());
         }
-        return out.toString();
+
+        return message.toString().trim();
     }
 }

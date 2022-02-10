@@ -37,6 +37,7 @@ public class T02MouseAndCheese {
 
             direction = scanner.nextLine();
         }
+        
         if (eatenCheese >= CHEESE_TO_EAT) {
             System.out.printf("Great job, the mouse is fed %d cheeses!%n",
                     eatenCheese);

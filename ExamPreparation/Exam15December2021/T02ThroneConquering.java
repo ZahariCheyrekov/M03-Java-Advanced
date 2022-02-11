@@ -3,54 +3,57 @@ package M03_JavaAdvanced.ExamPreparation.Exam15December2021;
 import java.util.Scanner;
 
 public class T02ThroneConquering {
-    public static char[][] matrix;
+    private static Scanner scanner = new Scanner(System.in);
 
-    public static int ParisRow = 0;
-    public static int ParisCol = 0;
+    private static char[][] field;
 
-    public static boolean reachedHelen;
+    private static int ParisRow;
+    private static int ParisCol;
 
-    public static int energy;
+    private static int energy;
+
+    private static boolean died;
+    private static boolean reachedHelen;
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         energy = Integer.parseInt(scanner.nextLine());
-        int rows = Integer.parseInt(scanner.nextLine());
+        int size = Integer.parseInt(scanner.nextLine());
 
-        readMatrix(rows, scanner);
+        field = new char[size][];
+        fillField();
 
         findParis();
 
-        reachedHelen = false;
-        while (energy > 0) {
+        String input = scanner.nextLine();
+        while (!died && !reachedHelen) {
+            String[] data = input.split("[\\s]+");
 
-            if (reachedHelen) {
-                break;
-            }
+            String direction = data[0];
+            int enemyRow = Integer.parseInt(data[1]);
+            int enemyCol = Integer.parseInt(data[2]);
 
-            String[] commands = scanner.nextLine().split("\\s+");
-
-            String direction = commands[0];
-            int row = Integer.parseInt(commands[1]);
-            int col = Integer.parseInt(commands[2]);
+            field[enemyRow][enemyCol] = 'S';
+            field[ParisRow][ParisCol] = '-';
 
             energy--;
 
-            matrix[row][col] = 'S';
-
             moveParis(direction);
 
+            if (reachedHelen) {
+                System.out.printf("Paris has successfully abducted Helen! Energy left: %d%n", energy);
+                break;
+            }
+
+            if (died || energy <= 0) {
+                System.out.printf("Paris died at %d;%d.%n", ParisRow, ParisCol);
+                field[ParisRow][ParisCol] = 'X';
+                break;
+            }
+
+            input = scanner.nextLine();
         }
 
-        if (energy <= 0) {
-            System.out.printf("Paris died at %d;%d.%n", ParisRow, ParisCol);
-        }
-
-        if (reachedHelen) {
-            System.out.println("Paris has successfully abducted Helen! Energy left: " + energy);
-        }
-
-        printMatrix();
+        printField();
     }
 
     private static void moveParis(String direction) {
@@ -66,100 +69,91 @@ public class T02ThroneConquering {
                 row++;
                 break;
 
-            case "left":
-                col--;
-                break;
-
             case "right":
                 col++;
+                break;
+
+            case "left":
+                col--;
                 break;
         }
 
         boolean inBounds = checkIfInBounds(row, col);
+
         if (inBounds) {
-            matrix[ParisRow][ParisCol] = '-';
+            char currentCell = field[row][col];
 
             ParisRow = row;
             ParisCol = col;
 
-            char cell = checkCell();
-
-            switch (cell) {
+            switch (currentCell) {
                 case 'S':
                     energy -= 2;
 
                     if (energy <= 0) {
-                        matrix[ParisRow][ParisCol] = 'X';
-                    } else {
-                        matrix[ParisRow][ParisCol] = 'P';
+                        died = true;
                     }
                     break;
 
                 case 'H':
                     reachedHelen = true;
-                    matrix[ParisRow][ParisCol] = '-';
+                    field[ParisRow][ParisCol] = '-';
                     break;
 
                 case '-':
-                    if (energy > 0) {
-                        matrix[ParisRow][ParisCol] = 'P';
-                    } else {
-                        matrix[ParisRow][ParisCol] = 'X';
-                    }
+                    field[ParisRow][ParisCol] = 'P';
                     break;
+            }
+
+
+            if (!died && !reachedHelen) {
+                field[ParisRow][ParisCol] = 'P';
             }
         }
     }
 
-    private static char checkCell() {
-        return matrix[ParisRow][ParisCol];
+    private static boolean checkIfInBounds(int row, int col) {
+        return (row >= 0) && (row < field.length) &&
+                (col >= 0) && (col < field[row].length);
     }
 
-    private static boolean checkIfInBounds(int row, int col) {
-        return (row >= 0) && (row < matrix.length) &&
-                (col >= 0) && (col < matrix[row].length);
+    private static void fillField() {
+        for (int row = 0; row < field.length; row++) {
+            field[row] = scanner.nextLine().toCharArray();
+        }
     }
 
     private static void findParis() {
-        boolean hasBeenFound = false;
+        boolean isFound = false;
 
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
+        for (int row = 0; row < field.length; row++) {
+            for (int col = 0; col < field[row].length; col++) {
+                char currentChar = field[row][col];
 
-                if (matrix[row][col] == 'P') {
+                if (currentChar == 'P') {
                     ParisRow = row;
                     ParisCol = col;
 
-                    hasBeenFound = true;
-                    break;
+                    isFound = true;
                 }
             }
 
-            if (hasBeenFound) {
+            if (isFound) {
                 break;
             }
         }
     }
 
-    private static void readMatrix(int rows, Scanner scanner) {
-        matrix = new char[rows][];
+    private static void printField() {
+        StringBuilder out = new StringBuilder();
 
-        for (int row = 0; row < matrix.length; row++) {
-            matrix[row] = readElements(scanner);
-        }
-    }
-
-    private static char[] readElements(Scanner scanner) {
-        return scanner.nextLine().toCharArray();
-    }
-
-    private static void printMatrix() {
-        for (char[] row : matrix) {
+        for (char[] row : field) {
             for (char col : row) {
-
-                System.out.print(col);
+                out.append(col);
             }
-            System.out.println();
+            out.append(System.lineSeparator());
         }
+
+        System.out.print(out);
     }
 }

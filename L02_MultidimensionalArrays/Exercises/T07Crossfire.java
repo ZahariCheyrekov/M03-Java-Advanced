@@ -74,6 +74,7 @@ public class T07Crossfire {
             int newMatrixRow = 0; // row of iteration of new matrix
 
             int elementToRemove = matrix[row][col];
+            
             while (!finished) {
                 int matrixRowSize = matrix[rowMatrix].length;
 

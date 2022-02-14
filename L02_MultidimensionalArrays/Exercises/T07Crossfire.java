@@ -1,73 +1,134 @@
 package M03_JavaAdvanced.L02_MultidimensionalArrays.Exercises;
 
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
 
 public class T07Crossfire {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int[] dimension = findElements(scanner);
+    private static final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private static int[][] matrix;
 
-        int rows = dimension[0];
-        int cols = dimension[1];
+    public static void main(String[] args) throws IOException {
+        int[] dimensions = getElements(reader.readLine());
 
-        List<List<Integer>> matrix = new ArrayList<>();
-        fillMatrix(matrix, rows, cols);
+        int rows = dimensions[0];
+        int cols = dimensions[1];
 
-        String input = scanner.nextLine();
+        matrix = fillMatrix(rows, cols);
+
+        String input = reader.readLine();
         while (!input.equals("Nuke it from orbit")) {
-            String[] numbers = input.split("\\s+");
+            int[] numbers = getElements(input);
 
-            int row = Integer.parseInt(numbers[0]);
-            int col = Integer.parseInt(numbers[1]);
-            int radius = Integer.parseInt(numbers[2]);
+            int row = numbers[0];
+            int col = numbers[1];
+            int radius = numbers[2];
 
-            for (int i = row - radius; i <= row + radius; i++) {
-                if (isInMatrix(i, col, matrix) && i != row) {
-                    matrix.get(i).remove(col);
+            int start = Math.max(0, row - radius);
+            int end = Math.min(matrix.length - 1, row + radius);
+
+            for (int i = start; i <= end; i++) {
+                if (isValid(i, col) && i != row) {
+                    removeElement(i, col);
                 }
             }
 
-            for (int i = col + radius; i >= col - radius; i--) {
-                if (isInMatrix(row, i, matrix)) {
-                    matrix.get(row).remove(i);
+            end = Math.max(0, col - radius);
+            for (int i = col + radius; i >= end; i--) {
+                if (isValid(row, i)) {
+                    removeElement(row, i);
                 }
             }
-            matrix.removeIf(List::isEmpty);
 
-            input = scanner.nextLine();
+            input = reader.readLine();
         }
-        printMatrix(matrix);
+
+        printMatrix();
     }
 
-    private static boolean isInMatrix(int row, int col, List<List<Integer>> matrix) {
-        return row >= 0 && row < matrix.size() && col >= 0 && col < matrix.get(row).size();
-    }
+    private static void removeElement(int row, int col) {
+        int rowSize = matrix[row].length - 1;
 
-    private static void printMatrix(List<List<Integer>> matrix) {
-        for (List<Integer> row : matrix) {
-            for (Integer element : row) {
-                System.out.print(element + " ");
+        if (rowSize > 0) {
+            int elementToRemove = matrix[row][col];
+
+            int index = 0;
+            int[] arr = new int[rowSize];
+            for (int i = 0; i < matrix[row].length; i++) {
+                int currentNum = matrix[row][i];
+
+                if (currentNum != elementToRemove) {
+                    arr[index++] = currentNum;
+                }
             }
-            System.out.println();
+
+            matrix[row] = arr;
+
+        } else {
+            int[][] newMatrix = new int[matrix.length - 1][];
+
+            boolean finished = false;
+
+            int rowMatrix = 0; // row of iteration of older matrix
+            int newMatrixRow = 0; // row of iteration of new matrix
+
+            int elementToRemove = matrix[row][col];
+            while (!finished) {
+                int matrixRowSize = matrix[rowMatrix].length;
+
+                if (matrixRowSize > 1 || matrix[rowMatrix][col] != elementToRemove) {
+                    newMatrix[newMatrixRow] = matrix[rowMatrix];
+                    newMatrixRow++;
+                }
+
+                rowMatrix++;
+
+                if (rowMatrix >= matrix.length) {
+                    finished = true;
+                }
+            }
+            matrix = newMatrix;
         }
     }
 
-    private static void fillMatrix(List<List<Integer>> matrix, int rows, int cols) {
-        int number = 1;
+    private static boolean isValid(int row, int col) {
+        return (row >= 0) && (row < matrix.length) &&
+                (col >= 0) && (col < matrix[row].length);
+    }
 
-        for (int row = 0; row < rows; row++) {
-            matrix.add(new ArrayList<>());
-            for (int col = 0; col < cols; col++) {
-                matrix.get(row).add(number++);
+    private static int[][] fillMatrix(int rows, int cols) {
+        int[][] matrix = new int[rows][cols];
+        int counter = 1;
+
+        for (int row = 0; row < matrix.length; row++) {
+            for (int col = 0; col < matrix[row].length; col++) {
+                matrix[row][col] = counter++;
             }
         }
+
+        return matrix;
     }
 
-    private static int[] findElements(Scanner scanner) {
-        return Arrays.stream(scanner.nextLine().split("\\s+"))
-                .mapToInt(Integer::parseInt).toArray();
+    private static int[] getElements(String input) {
+        return Arrays
+                .stream(input.split("[\\s]+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+    }
+
+    private static void printMatrix() {
+        StringBuilder output = new StringBuilder();
+
+        for (int row = 0; row < matrix.length; row++) {
+            for (int col = 0; col < matrix[row].length; col++) {
+                int currentNum = matrix[row][col];
+
+                output.append(currentNum).append(" ");
+            }
+            output.append(System.lineSeparator());
+        }
+
+        System.out.print(output);
     }
 }

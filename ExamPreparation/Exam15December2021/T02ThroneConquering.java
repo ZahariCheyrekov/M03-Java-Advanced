@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class T02ThroneConquering {
     private static Scanner scanner = new Scanner(System.in);
+    
     private static char[][] field;
 
     private static int ParisRow;

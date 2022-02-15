@@ -104,10 +104,12 @@ public class T02Bomb {
     }
 
     private static void readField(Scanner scanner) {
+      
         for (int row = 0; row < field.length; row++) {
             String[] elements = scanner.nextLine().split("[\\s]+");
 
             for (int col = 0; col < elements.length; col++) {
+                
                 char currentChar = elements[col].charAt(0);
 
                 if (currentChar == 's') {

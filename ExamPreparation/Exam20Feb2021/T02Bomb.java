@@ -5,7 +5,7 @@ import java.util.*;
 public class T02Bomb {
     public static char[][] field;
 
-    public static int sapperRow;
+    public static int sapperRow=0;
     public static int sapperCol;
 
     public static int allBombs;

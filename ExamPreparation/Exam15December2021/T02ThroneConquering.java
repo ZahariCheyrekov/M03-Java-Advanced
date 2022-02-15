@@ -128,6 +128,7 @@ public class T02ThroneConquering {
 
         for (int row = 0; row < field.length; row++) {
             for (int col = 0; col < field[row].length; col++) {
+             
                 char currentChar = field[row][col];
 
                 if (currentChar == 'P') {

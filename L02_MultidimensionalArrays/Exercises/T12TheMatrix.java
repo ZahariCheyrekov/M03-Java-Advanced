@@ -68,6 +68,7 @@ public class T12TheMatrix {
     private static int[] readData(BufferedReader reader) throws IOException {
         return Arrays.stream(reader.readLine()
                 .split("\\s+"))
-                .mapToInt(Integer::parseInt).toArray();
+                .mapToInt(Integer::parseInt)
+                .toArray();
     }
 }

@@ -48,13 +48,14 @@ public class T12TheMatrix {
 
     private static boolean isValid(int row, int col, char charToReplace) {
         return (row >= 0) && (row < matrix.length) &&
-                (col >= 0) && col < (matrix[row].length) &&
+                (col >= 0) && (col < matrix[row].length) &&
                 (matrix[row][col] == charToReplace);
     }
 
     private static void fillMatrix() throws IOException {
         for (int row = 0; row < matrix.length; row++) {
             String[] line = reader.readLine().split("\\s+");
+           
             for (int col = 0; col < line.length; col++) {
                 matrix[row][col] = line[col].charAt(0);
             }

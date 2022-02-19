@@ -54,6 +54,7 @@ public class Cage {
         List<Parrot> forSelling = new ArrayList<>();
 
         for (Parrot parrot : this.data) {
+            
             if (parrot.getSpecies().equals(species)) {
                 forSelling.add(parrot);
                 parrot.setAvailable(false);

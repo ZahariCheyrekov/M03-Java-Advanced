@@ -30,7 +30,8 @@ public class Cage {
 
     public boolean remove(String name) {
         return this.data
-                .removeIf(parrot -> parrot.getName().equals(name));
+                .removeIf(parrot -> parrot.getName()
+                          .equals(name));
     }
 
     public Parrot sellParrot(String name) {

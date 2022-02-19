@@ -39,6 +39,7 @@ public class Cage {
            
             if (parrot.getName().equals(name)) {
                 parrot.setAvailable(false);
+              
                 break;
             }
         }

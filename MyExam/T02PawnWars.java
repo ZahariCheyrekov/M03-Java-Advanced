@@ -40,13 +40,6 @@ public class T02PawnWars {
                     System.out.printf("Game over! White capture on %s.%n", position);
 
                     gameEnded = true;
-
-                    board[whitePawnRow][whitePawnCol] = '-';
-
-                    whitePawnRow = blackPawnRow;
-                    whitePawnCol = blackPawnCol;
-
-                    board[whitePawnRow][whitePawnCol] = 'w';
                 }
 
                 if (!gameEnded) {
@@ -64,13 +57,6 @@ public class T02PawnWars {
                     System.out.printf("Game over! Black capture on %s.%n", position);
 
                     gameEnded = true;
-
-                    board[blackPawnRow][blackPawnCol] = '-';
-
-                    blackPawnRow = whitePawnRow;
-                    blackPawnCol = whitePawnCol;
-
-                    board[blackPawnRow][blackPawnCol] = 'b';
                 }
 
                 if (!gameEnded) {

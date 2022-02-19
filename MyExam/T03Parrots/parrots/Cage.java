@@ -36,6 +36,7 @@ public class Cage {
 
     public Parrot sellParrot(String name) {
         for (Parrot parrot : this.data) {
+           
             if (parrot.getName().equals(name)) {
                 parrot.setAvailable(false);
                 break;

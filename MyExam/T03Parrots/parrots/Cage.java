@@ -75,6 +75,7 @@ public class Cage {
                 .append(System.lineSeparator());
 
         for (Parrot parrot : this.data) {
+          
             if (parrot.isAvailable()) {
                 message.append(parrot)
                         .append(System.lineSeparator());

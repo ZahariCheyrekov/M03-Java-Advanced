@@ -3,12 +3,12 @@ package M03_JavaAdvanced.ExamPreparation.Exam22Feb2020;
 import java.util.Scanner;
 
 public class T02ReVolt {
-    public static char[][] matrix;
+    private static char[][] matrix;
 
-    public static int playerRow;
-    public static int playerCol;
+    private static int playerRow;
+    private static int playerCol;
 
-    public static boolean haveWon = false;
+    private static boolean haveWon = false;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

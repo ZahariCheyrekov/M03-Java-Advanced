@@ -153,6 +153,7 @@ public class T02ReVolt {
     private static void readMatrix(Scanner scanner) {
         for (int row = 0; row < matrix.length; row++) {
             String[] elements = scanner.nextLine().split("");
+       
             for (int col = 0; col < elements.length; col++) {
                 char currentChar = elements[col].charAt(0);
 
